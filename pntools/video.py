@@ -1,5 +1,5 @@
 """
-Tools for working with videos. It contains some wrappers that call ffmpeg for processing videos.
+Tools for working with videos. It contains some wrappers that call  for processing videos.
 
 Use the gui module for browsing videos.
 """
@@ -9,9 +9,6 @@ import subprocess
 import urllib
 import time
 from pathlib import Path
-
-import ffmpeg
-from pytube import YouTube
 
 CLIP_FOLDER = 'C:\\data\\_clipcollection'
 
@@ -40,6 +37,9 @@ def detect_black_frames(vid_file):
     Returns a dictionary with lists of start times, end times, duration, and the file name that was given as input
     """
     assert os.path.exists(vid_file)
+
+    import ffmpeg
+
     def find_float(str, pre):
         return float(re.search(f'(?<={pre})[.\\d]+', str).group(0))
     bd = subprocess.getoutput(f'ffmpeg -i "{vid_file}" -vf blackdetect=d=0:pix_th=.01 -f rawvideo -y /NUL')
@@ -51,6 +51,8 @@ def detect_black_frames(vid_file):
 
 def interp_black_frames(vid_file, vid_output=None, overwrite=False):
     """Interpolate black frames in a video"""
+    import ffmpeg
+
     if vid_output is None:
         vid_output = os.path.join(Path(vid_file).parent, f'{Path(vid_file).stem} bfinterp{Path(vid_file).suffix}')
     if (not os.path.exists(vid_output)) or overwrite:
@@ -72,6 +74,9 @@ def make_montage2x2(vid_files, vid_output=None, aud_file=None, overwrite=False):
         Output from ffmpeg
     """
     assert len(vid_files) == 4
+
+    import ffmpeg
+
     vid_inputs = '" -i "'.join([''] + vid_files).removeprefix('" ') + '"'
     if vid_output is None:
         v0 = Path(vid_files[0])
@@ -111,6 +116,8 @@ def download(url, start_time=None, end_time=None, dur=None, full_file=False):
             vid_found = False
     
     assert vid_found is True
+
+    import ffmpeg
 
     ys = yvid.streams.get_highest_resolution()
     fname_in = ys.download(CLIP_FOLDER, url.split('?v=')[-1])

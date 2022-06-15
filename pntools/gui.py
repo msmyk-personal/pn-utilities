@@ -15,7 +15,7 @@ import io
 import os
 from datetime import timedelta
 
-import ffmpeg
+
 import numpy as np
 import matplotlib as mpl
 from matplotlib import pyplot as plt
@@ -24,7 +24,6 @@ from matplotlib import lines as mlines
 from matplotlib.widgets import Button as ButtonWidget
 from matplotlib.widgets import LassoSelector as LassoSelectorWidget
 from matplotlib.path import Path
-from decord import VideoReader
 
 from pntools import sampled
 
@@ -614,6 +613,7 @@ class VideoBrowser(GenericBrowser):
         plt.draw()
 
     def extract_clip(self, start_frame=None, end_frame=None, fname_out=None, out_rate=None):
+        import ffmpeg
         #TODO: For musicrunning, grab the corresponding audio and add the audio track to the video clip?
         if start_frame is None:
             start_frame = self._idx_memory_slots['1']
