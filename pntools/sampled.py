@@ -596,11 +596,12 @@ class Data: # Signal processing
         onset_samples, offset_samples = onoff_samples(self._sig)
         return [self.t[x] for x in onset_samples], [self.t[x] for x in offset_samples]
 
-    def fft(self):
-        N = len(self)
+    def fft(self, **kwargs):
+        """kwargs get passed to scipy.signal.fft"""
+        N = kwargs.get('n', len(self))
         T = 1/self.sr
         f = fftfreq(N, T)[:N//2]
-        amp = 2.0/N * np.abs(fft(self._sig)[0:N//2])
+        amp = 2.0/N * np.abs(fft(self._sig, **kwargs)[0:N//2])
         return f, amp
     
     def diff(self):
